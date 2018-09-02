@@ -1,6 +1,6 @@
 ## Installation
 
-1. Simply copy the `ResponsiveImg` folder into `site/addons/`.
+1. Simply copy the `ResponsiveImg` folder into `site/addons/`
 2. Ensure you are [Serving Cached Images Directly](https://docs.statamic.com/tags/glide#serving-cached-images)
 3. That's it!
 
