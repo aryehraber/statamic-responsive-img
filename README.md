@@ -4,7 +4,11 @@
 
 This addon makes it super simple to output an `img` with multiple srcset sizes defined to ensure browsers only ever download the size it needs based on the viewport. Additionally, a base64-encoded SVG will be inlined to show a tiny, blurred image while the real image is loading -- this will ensure the image renders at the correct size on initial page load without an extra network request.
 
-For more info on how this works, read Spatie's [Responsive Image docs](https://docs.spatie.be/laravel-medialibrary/v7/responsive-images/getting-started-with-responsive-images).
+For more info on how this works under the hood, read Spatie's [Responsive Image docs](https://docs.spatie.be/laravel-medialibrary/v7/responsive-images/getting-started-with-responsive-images).
+
+## Getting started
+
+To get started and for a list of available options, check out the [docs](DOCUMENTATION.md).
 
 ## Example
 
