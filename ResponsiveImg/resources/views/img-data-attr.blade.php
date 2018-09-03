@@ -1,0 +1,1 @@
+<img {!! $attributes !!} src="{{ $image->getSvg() }}" data-src="{{ $image->getSrc() }}" data-srcset="{{ $image->getSrcset() }}" onload="this.onload=null;this.sizes=Math.ceil(this.getBoundingClientRect().width/window.innerWidth*100)+'vw';" sizes="1px" width="{{ $image->getWidth() }}">
