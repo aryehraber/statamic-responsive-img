@@ -37,5 +37,5 @@ Loop over an array of images using the `assets` tag:
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `quality` | Integer | `75` | Defines the quality of the image (see [Glide parameters](https://docs.statamic.com/tags/glide#parameters) for more details). |
-| `attr` | String | | Add additional HTML attributes to the `<img>` tag, specify multiple attributes by pipe delimiting them. E.g. attr="id:my-id\|class:some-class". |
+| `attr` | String | | Add additional HTML attributes to the `<img>` tag, specify multiple attributes by pipe delimiting them. E.g. `attr="id:my-id\|class:some-class"`. |
 | `data-attr` | Boolean | `false` | Change `src` & `srcset` into data-attributes (for lazy-loading images). |
