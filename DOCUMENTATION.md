@@ -15,7 +15,21 @@ ResponsiveImg makes use of Statamic's shorthand tag syntax:
 Add additional attributes by using the `attr` option:
 
 ```html
-{{ responsive_img:[image_name] attr="id:my-id|class:some-class" }}
+{{ responsive_img:[image_name] attr="id:my-id|class:some-class|alt:Lorem Ipsum" }}
+```
+
+To lazy-load images using JS, add the `data-attr` option:
+
+```html
+{{ responsive_img:[image_name] data-attr="true" }}
+```
+
+Loop over an array of images using the `assets` tag:
+
+```html
+{{ assets:gallery }}
+  {{ responsive_img:id attr="class:image-{ index }|alt:{ alt }" }}
+{{ /assets:gallery }}
 ```
 
 ## Options
