@@ -5,10 +5,11 @@ namespace Statamic\Addons\ResponsiveImg;
 use Statamic\Assets\Asset;
 use Statamic\Extend\Extensible;
 
-class Image
+class ResponsiveImage
 {
     use Extensible;
 
+    public $svg;
     protected $image;
     protected $quality;
 
@@ -22,12 +23,17 @@ class Image
         }
     }
 
-    public static function getSrcset(Asset $image, $quality)
+    public static function make(Asset $image, $quality)
     {
-        return (new self($image, $quality))->srcset();
+        return (new self($image, $quality));
     }
 
-    public function srcset()
+    public function getSrc()
+    {
+        return $this->getManipulatedImage();
+    }
+
+    public function getSrcset()
     {
         $srcset = $this->calculateWidths()->map(function ($width) {
             $image = $this->getManipulatedImage(['w' => $width]);
@@ -35,9 +41,33 @@ class Image
             return "{$image} {$width}w";
         })->implode(', ');
 
-        $srcset .= ", {$this->generateSvg()} 32w";
+        $srcset .= ", {$this->getSvg()} 32w";
 
         return $srcset;
+    }
+
+    public function getSvg()
+    {
+        if (! is_null($this->svg)) {
+            return $this->svg;
+        }
+
+        $base64Image = 'data:image/jpeg;base64,'.$this->getTinyImage();
+
+        $svg = $this->view('svg', [
+            'width' => $this->image->width(),
+            'height' => $this->image->height(),
+            'base64Image' => $base64Image,
+        ]);
+
+        $this->svg = 'data:image/svg+xml;base64,'.base64_encode($svg);
+
+        return $this->svg;
+    }
+
+    public function getWidth()
+    {
+        return $this->image->width();
     }
 
     protected function calculateWidths()
@@ -81,19 +111,6 @@ class Image
         return false;
     }
 
-    protected function generateSvg()
-    {
-        $base64Image = 'data:image/jpeg;base64,'.$this->getTinyImage();
-
-        $svg = $this->view('svg', [
-            'imageWidth' => $this->image->width(),
-            'imageHeight' => $this->image->height(),
-            'base64Image' => $base64Image,
-        ]);
-
-        return 'data:image/svg+xml;base64,'.base64_encode($svg);
-    }
-
     protected function getTinyImage()
     {
         $imagePath = $this->getManipulatedImage(['w' => 32, 'blur' => 8]);
@@ -101,7 +118,7 @@ class Image
         return base64_encode(file_get_contents(webroot_path($imagePath)));
     }
 
-    protected function getManipulatedImage($params)
+    protected function getManipulatedImage($params = [])
     {
         $default = ['fm' => 'jpg', 'q' => $this->quality];
 
