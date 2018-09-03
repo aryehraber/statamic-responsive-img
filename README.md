@@ -8,7 +8,7 @@ For more info on how this works under the hood, read Spatie's [Responsive Image 
 
 ## Getting started
 
-To get started and for a list of available options, check out the [docs](DOCUMENTATION.md).
+To get started and for a list of available options, check out the [docs](https://statamic.com/marketplace/addons/responsive-img/docs).
 
 ## Example
 
