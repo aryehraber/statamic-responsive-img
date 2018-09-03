@@ -96,9 +96,9 @@ class Image
 
     protected function getTinyImage()
     {
-        $imageUrl = $this->getManipulatedImage(['w' => 32, 'blur' => 8]);
+        $imagePath = $this->getManipulatedImage(['w' => 32, 'blur' => 8]);
 
-        return base64_encode(file_get_contents(root_path($imageUrl)));
+        return base64_encode(file_get_contents(webroot_path($imagePath)));
     }
 
     protected function getManipulatedImage($params)
