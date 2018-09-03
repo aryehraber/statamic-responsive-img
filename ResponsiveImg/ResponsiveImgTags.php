@@ -16,7 +16,7 @@ class ResponsiveImgTags extends Tags
     {
         $image = array_get($this->context, $this->tag_method);
 
-        if (! $image = Asset::find($image ?: $this->get('image'))) {
+        if (! $image = Asset::find($image)) {
             return null;
         }
 
