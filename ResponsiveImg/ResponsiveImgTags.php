@@ -24,7 +24,7 @@ class ResponsiveImgTags extends Tags
 
         return $this->view($view, [
             'attributes' => $this->getAttributeString(),
-            'image' => ResponsiveImage::make($image, $this->get('quality', 75)),
+            'image' => ResponsiveImg::make($image, $this->get('quality', 75)),
         ]);
     }
 }

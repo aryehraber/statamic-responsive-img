@@ -5,7 +5,7 @@ namespace Statamic\Addons\ResponsiveImg;
 use Statamic\Assets\Asset;
 use Statamic\Extend\Extensible;
 
-class ResponsiveImage
+class ResponsiveImg
 {
     use Extensible;
 
