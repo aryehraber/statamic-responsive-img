@@ -32,6 +32,12 @@ Loop over an array of images using the `assets` tag:
 {{ /assets:gallery }}
 ```
 
+To add glide image manipulation parameters, add the `glide` option with pseudo json (using '' instead of "" for values):
+
+```html
+{{ responsive_img:url glide="{'w':800,'h':500,'fit':'crop_focal'}" attr="class:w-full" data-attr="false" quality="83" }}
+```
+
 ## Parameters
 
 | Name | Type | Default | Description |
@@ -39,3 +45,4 @@ Loop over an array of images using the `assets` tag:
 | `quality` | Integer | `75` | Defines the quality of the image (see [Glide parameters](https://docs.statamic.com/tags/glide#parameters)). |
 | `attr` | String | | Add additional HTML attributes to the `<img>` tag, specify multiple attributes by pipe delimiting them. |
 | `data-attr` | Boolean | `false` | Change `src` & `srcset` into data-attributes (for lazy-loading using your own JS). |
+| `glide` | Json | `null` | Add glide image manipulation paramaters including 'fit':'crop_focal' to use focal point from statamic. |
