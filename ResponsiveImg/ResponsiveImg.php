@@ -113,9 +113,11 @@ class ResponsiveImg
 
     protected function getTinyImage()
     {
-        $imagePath = $this->getManipulatedImage(['w' => 32, 'blur' => 8]);
+        $path = $this->getManipulatedImage(['w' => 32, 'blur' => 8]);
 
-        return base64_encode(file_get_contents(webroot_path($imagePath)));
+        $image = file_get_contents(webroot_path(urldecode($path)));
+
+        return base64_encode($image);
     }
 
     protected function getManipulatedImage($params = [])
