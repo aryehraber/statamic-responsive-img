@@ -60,9 +60,7 @@ class ResponsiveImg
             'base64Image' => $base64Image,
         ]);
 
-        $this->svg = 'data:image/svg+xml;base64,'.base64_encode($svg);
-
-        return $this->svg;
+        return $this->svg = 'data:image/svg+xml;base64,'.base64_encode($svg);
     }
 
     public function getWidth()
