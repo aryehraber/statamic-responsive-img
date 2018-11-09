@@ -14,7 +14,17 @@ class ResponsiveImgTags extends Tags
      */
     public function __call($name, $args)
     {
-        $image = array_get($this->context, $this->tag_method);
+        return $this->index(array_get($this->context, $name));
+    }
+
+    /**
+     * Handle {{ responsive_img image="..." }} tags
+     *
+     * @return string
+     */
+    public function index($image = null)
+    {
+        $image = $image ?: $this->get('image');
 
         if (! $image = Asset::find($image)) {
             return null;
