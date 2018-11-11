@@ -12,22 +12,20 @@ class ResponsiveImg
     public $svg;
     protected $image;
     protected $quality;
-    protected $glide;
 
-    public function __construct(Asset $image, $quality, $glide)
+    public function __construct(Asset $image, $quality)
     {
         $this->image = $image;
         $this->quality = $quality;
-        $this->glide = $glide;
 
         if (! $this->image) {
             throw new Exception;
         }
     }
 
-    public static function make(Asset $image, $quality, $glide)
+    public static function make(Asset $image, $quality)
     {
-        return (new self($image, $quality, $glide));
+        return (new self($image, $quality));
     }
 
     public function getSrc()
@@ -124,7 +122,6 @@ class ResponsiveImg
     {
         $default = ['fm' => 'jpg', 'q' => $this->quality];
 
-        if(!$this->glide) $this->glide = [];
-        return $this->image->manipulate(array_merge($default, $params, $this->glide));
+        return $this->image->manipulate(array_merge($default, $params));
     }
 }
