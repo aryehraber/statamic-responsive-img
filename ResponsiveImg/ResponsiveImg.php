@@ -90,27 +90,27 @@ class ResponsiveImg
         return filesize($file);
     }
 
-    public function getAspectRatio($param)
+    public function getAspectRatio($params)
     {
-        if(isset($param['w']))
+        if(isset($params['w']))
             $width = $this->image->width();
         else
-            $width = $param['w'];
-        if(isset($param['h']))
+            $width = $params['w'];
+        if(isset($params['h']))
             $height = $this->image->height();
         else
-            $height = $param['h'];
+            $height = $params['h'];
         return $width/$height;
     }
 
-    public function getHeightBasedOnWidth($w,$param)
+    public function getHeightBasedOnWidth($w,$params)
     {
-        return (int)$w/$this->getAspectRatio($param);
+        return (int)$w/$this->getAspectRatio($params);
     }
 
-    public function getWidthBasedOnHeight($h,$param)
+    public function getWidthBasedOnHeight($h,$params)
     {
-        return (int)$h*$this->getAspectRatio($param);
+        return (int)$h*$this->getAspectRatio($params);
     }
 
     protected function calculateWidths()
@@ -165,19 +165,21 @@ class ResponsiveImg
 
     protected function getManipulatedImage($params = [])
     {
+        //add defaults
         $params = array_merge(['fm' => 'jpg', 'q' => $this->quality], $params);
-        $glide_params = $this->glide;
 
+        //negotiate glide params into params
+        $glide_params = $this->glide;
         if(isset($params['w'])) unset($glide_params['w']);
         if(isset($params['h'])) unset($glide_params['h']);
+        $params = array_merge($glide_params, $params);
 
-        $merged_params = array_merge($glide_params, $params);
+        //add missing dimensions according to aspect ratio
+        if(isset($params['w']) && !isset($params['h']))
+            $params['h'] = $this->getHeightBasedOnWidth($params['w'],$this->glide);
+        if(isset($params['h']) && !isset($params['w']))
+            $params['w'] = $this->getWidthBasedOnHeight($params['h'],$this->glide);
 
-        if(isset($merged_params['w']) && !isset($merged_params['h']))
-            $merged_params['h'] = $this->getHeightBasedOnWidth($merged_params['w'],$this->glide);
-        if(isset($merged_params['h']) && !isset($merged_params['w']))
-            $merged_params['w'] = $this->getHeightBasedOnWidth($merged_params['h'],$this->glide);
-
-        return $this->image->manipulate($merged_params);
+        return $this->image->manipulate($params);
     }
 }
