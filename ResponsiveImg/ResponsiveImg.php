@@ -4,6 +4,7 @@ namespace Statamic\Addons\ResponsiveImg;
 
 use Statamic\Assets\Asset;
 use Statamic\Extend\Extensible;
+use Statamic\Imaging\ImageGenerator;
 
 class ResponsiveImg
 {
@@ -12,20 +13,22 @@ class ResponsiveImg
     public $svg;
     protected $image;
     protected $quality;
+    protected $glide;
 
-    public function __construct(Asset $image, $quality)
+    public function __construct(Asset $image, $quality, $glide)
     {
         $this->image = $image;
         $this->quality = $quality;
+        $this->glide = $glide;
 
         if (! $this->image) {
             throw new Exception;
         }
     }
 
-    public static function make(Asset $image, $quality)
+    public static function make(Asset $image, $quality, $glide)
     {
-        return (new self($image, $quality));
+        return (new self($image, $quality, $glide));
     }
 
     public function getSrc()
@@ -55,8 +58,8 @@ class ResponsiveImg
         $base64Image = 'data:image/jpeg;base64,'.$this->getTinyImage();
 
         $svg = $this->view('svg', [
-            'width' => $this->image->width(),
-            'height' => $this->image->height(),
+            'width' => $this->getWidth(),
+            'height' => $this->getHeight(),
             'base64Image' => $base64Image,
         ]);
 
@@ -65,14 +68,56 @@ class ResponsiveImg
 
     public function getWidth()
     {
+        if(isset($this->glide['w']))
+            return $this->glide['w'];
+        elseif(isset($this->glide['h']))
+            return $this->getWidthBasedOnHeight($this->glide['h'],$this->glide);
         return $this->image->width();
+    }
+
+    public function getHeight()
+    {
+        if(isset($this->glide['h']))
+            return $this->glide['h'];
+        elseif(isset($this->glide['w']))
+            return $this->getHeightBasedOnWidth($this->glide['w'],$this->glide);
+        return $this->image->height();
+    }
+
+    public function getSize()
+    {
+        $file = 'img/'.app(ImageGenerator::class)->generateByAsset($this->image, $this->glide);
+        return filesize($file);
+    }
+
+    public function getAspectRatio($param)
+    {
+        if(isset($param['w']))
+            $width = $this->image->width();
+        else
+            $width = $param['w'];
+        if(isset($param['h']))
+            $height = $this->image->height();
+        else
+            $height = $param['h'];
+        return $width/$height;
+    }
+
+    public function getHeightBasedOnWidth($w,$param)
+    {
+        return (int)$w/$this->getAspectRatio($param);
+    }
+
+    public function getWidthBasedOnHeight($h,$param)
+    {
+        return (int)$h*$this->getAspectRatio($param);
     }
 
     protected function calculateWidths()
     {
-        $width = $this->image->width();
-        $height = $this->image->height();
-        $fileSize = $this->image->size();
+        $width = $this->getWidth();
+        $height = $this->getHeight();
+        $fileSize = $this->getSize();
 
         $targetWidths = collect();
 
@@ -120,8 +165,19 @@ class ResponsiveImg
 
     protected function getManipulatedImage($params = [])
     {
-        $default = ['fm' => 'jpg', 'q' => $this->quality];
+        $params = array_merge(['fm' => 'jpg', 'q' => $this->quality], $params);
+        $glide_params = $this->glide;
 
-        return $this->image->manipulate(array_merge($default, $params));
+        if(isset($params['w'])) unset($glide_params['w']);
+        if(isset($params['h'])) unset($glide_params['h']);
+
+        $merged_params = array_merge($glide_params, $params);
+
+        if(isset($merged_params['w']) && !isset($merged_params['h']))
+            $merged_params['h'] = $this->getHeightBasedOnWidth($merged_params['w'],$this->glide);
+        if(isset($merged_params['h']) && !isset($merged_params['w']))
+            $merged_params['w'] = $this->getHeightBasedOnWidth($merged_params['h'],$this->glide);
+
+        return $this->image->manipulate($merged_params);
     }
 }

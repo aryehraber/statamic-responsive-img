@@ -30,11 +30,24 @@ class ResponsiveImgTags extends Tags
             return null;
         }
 
+        //retrieve glide parameter from pseudo json
+        $glide = json_decode(str_replace("'","\"",$this->getParam('glide')), true);
+        if(!is_array($glide)) $glide  = [];
+
+        //if there is a focal crop, set focal in glide syntax
+        if(isset($glide["fit"]) && $glide["fit"] == "crop_focal")
+        {
+            $glide["fit"] = "crop";
+            if ($focus = $image->get('focus')) {
+                $glide["fit"] .= '-' . $focus;
+            }
+        }
+
         $view = $this->getBool('data-attr', false) ? 'img-data-attr' : 'img';
 
         return $this->view($view, [
             'attributes' => $this->getAttributeString(),
-            'image' => ResponsiveImg::make($image, $this->get('quality', 75)),
+            'image' => ResponsiveImg::make($image, $this->get('quality', 75), $glide),
         ]);
     }
 }
