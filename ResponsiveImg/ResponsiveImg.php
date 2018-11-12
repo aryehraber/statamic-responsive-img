@@ -159,7 +159,7 @@ class ResponsiveImg
         $path = $this->getManipulatedImage(['w' => 32, 'blur' => 8]);
 
         $image = file_get_contents(webroot_path(urldecode($path)));
-        
+
         return base64_encode($image);
     }
 
