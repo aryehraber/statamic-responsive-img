@@ -14,7 +14,7 @@ class ResponsiveImgTags extends Tags
      */
     public function __call($name, $args)
     {
-        return $this->index(array_get($this->context, $name));
+        return $this->index(array_get($this->context, $this->tag_method));
     }
 
     /**
