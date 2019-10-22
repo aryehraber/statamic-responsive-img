@@ -30,11 +30,16 @@ class ResponsiveImgTags extends Tags
             return null;
         }
 
-        $view = $this->getBool('data-attr', false) ? 'img-data-attr' : 'img';
-
-        return $this->view($view, [
+        return $this->view($this->getViewName(), [
             'attributes' => $this->getAttributeString(),
             'image' => ResponsiveImg::make($image, $this->get('quality', 75)),
         ]);
+    }
+
+    protected function getViewName()
+    {
+        $useDataSrc = $this->getBool('data-src', false) || $this->getBool('data-attr', false);
+
+        return $useDataSrc ? 'img-data-attr' : 'img';
     }
 }
