@@ -18,12 +18,6 @@ Add additional attributes by using the `attr` option:
 {{ responsive_img:[image_name] attr="id:my-id|class:some-class|alt:Lorem Ipsum" }}
 ```
 
-To lazy-load images using JS, add the `data-attr` option:
-
-```html
-{{ responsive_img:[image_name] data-attr="true" }}
-```
-
 Loop over an array of images using the `assets` tag:
 
 ```html
@@ -32,10 +26,16 @@ Loop over an array of images using the `assets` tag:
 {{ /assets:gallery }}
 ```
 
+To lazy-load images using JS, add the `data-src` option:
+
+```html
+{{ responsive_img:[image_name] data-src="true" }}
+```
+
 ## Parameters
 
 | Name | Type | Default | Description |
 |--------|------|---------|-------------|
 | `quality` | Integer | `75` | Defines the quality of the image (see [Glide parameters](https://docs.statamic.com/tags/glide#parameters)). |
 | `attr` | String | | Add additional HTML attributes to the `<img>` tag, specify multiple attributes by pipe delimiting them. |
-| `data-attr` | Boolean | `false` | Change `src` & `srcset` into data-attributes (for lazy-loading using your own JS). |
+| `data-src` | Boolean | `false` | Change `src` & `srcset` into `data-src` & `data-srcset` (for lazy-loading using JS). |
