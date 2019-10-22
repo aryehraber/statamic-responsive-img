@@ -32,6 +32,25 @@ To lazy-load images using JS, add the `data-src` option:
 {{ responsive_img:[image_name] data-src="true" }}
 ```
 
+When using `data-src`, you are free to use any lazy-loading library that makes use of this technique. If you want to keep things simple and merely defer image loading until the rest of the page is ready, the following vanilla JS snippet should get you started:
+
+```js
+<script>
+function lazyLoadImages() {
+  var imgs = document.querySelectorAll('img');
+
+  for (var i=0; i < imgs.length; i++) {
+    if (imgs[i].getAttribute('data-src')) {
+      imgs[i].setAttribute('src', imgs[i].getAttribute('data-src'));
+      imgs[i].setAttribute('srcset', imgs[i].getAttribute('data-srcset'));
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', lazyLoadImages);
+</script>
+```
+
 ## Parameters
 
 | Name | Type | Default | Description |
