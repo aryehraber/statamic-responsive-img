@@ -2,6 +2,8 @@
 
 namespace Statamic\Addons\ResponsiveImg;
 
+use Statamic\API\Str;
+use Statamic\API\URL;
 use Statamic\Assets\Asset;
 use Statamic\Extend\Extensible;
 
@@ -112,16 +114,15 @@ class ResponsiveImg
     protected function getTinyImage()
     {
         $path = $this->getManipulatedImage(['w' => 32, 'blur' => 8]);
+        $image = webroot_path(urldecode(Str::removeLeft($path, url())));
 
-        $image = file_get_contents(webroot_path(urldecode($path)));
-
-        return base64_encode($image);
+        return base64_encode(file_get_contents($image));
     }
 
     protected function getManipulatedImage($params = [])
     {
         $default = ['fm' => 'jpg', 'q' => $this->quality];
 
-        return $this->image->manipulate(array_merge($default, $params));
+        return URL::makeRelative($this->image->manipulate(array_merge($default, $params)));
     }
 }
